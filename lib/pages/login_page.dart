@@ -1,21 +1,72 @@
-// ignore_for_file: prefer_const_constructors
 
-import 'package:azep_bus_app/bus_lists.dart';
-import 'package:azep_bus_app/forgot_password.dart';
-import 'package:azep_bus_app/school_select_page.dart';
-import 'package:azep_bus_app/text_fields.dart';
+
+import 'package:azep_bus_app/pages/bus_lists_page.dart';
+import 'package:azep_bus_app/pages/forgot_password_page.dart';
+import 'package:azep_bus_app/pages/text_fields.dart';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../routes/app_routes.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
+  String? mobileNo;
   final usernameController = TextEditingController();
   final PassWordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _checkLocationPermission();
+  }
+
+  Future<void> _checkLocationPermission() async {
+    final PermissionStatus status = await Permission.location.status;
+
+    if (status == PermissionStatus.granted) {
+      // Location permission already granted
+      // Do your location-related tasks here
+    } else {
+      // Location permission not granted
+      // Ask for permission
+      _askLocationPermission();
+    }
+  }
+
+  Future<void> _askLocationPermission() async {
+    if (await Permission.location.request().isGranted) {
+      // Permission granted
+      // Do your location-related tasks here
+    } else {
+      // Permission denied
+      // Handle the case where the user denies the permission
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Location Permission Denied'),
+            content: Text('Please grant location permission to use this feature.'),
+            actions: <Widget>[
+              TextButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,13 +107,7 @@ class _LoginPageState extends State<LoginPage> {
                                   fontWeight: FontWeight.w700),
                             ),
                             onPressed: () {
-                              Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const SchoolSelectPage(),
-                                  ),
-                                  ((route) => route.isFirst));
+
                             },
                           ),
                         ),
@@ -125,12 +170,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: Center(
                           child: TextButton(
                             onPressed: () {
-                              Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ForgotPasswordPage(),
-                                  ),
-                                  ((route) => route.isFirst));
+
                             },
                             child: Text(
                               'forgot password?',
@@ -157,13 +197,14 @@ class _LoginPageState extends State<LoginPage> {
                       style: ElevatedButton.styleFrom(
                         primary: Color(0xFF4885ED),
                       ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => BusLists(),
-                          ),
-                        );
+                      onPressed: () async{
+                        mobileNo= usernameController.text.trim();
+                        SharedPreferences pref= await SharedPreferences.getInstance();
+                        pref.setString("mobile_no", mobileNo.toString());
+
+                        Navigator.pushNamed(context, AppRoutes.homePage,arguments: mobileNo);
+
+                        Fluttertoast.showToast(msg: '$mobileNo is your mobile no');
                       },
                       child: Text(
                         'Next',

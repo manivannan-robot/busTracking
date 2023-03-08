@@ -1,14 +1,11 @@
-// ignore_for_file: prefer_const_constructors
 
-import 'package:azep_bus_app/login_page.dart';
-import 'package:azep_bus_app/password_fields.dart';
-import 'package:azep_bus_app/text_fields.dart';
+
+import 'package:azep_bus_app/pages/password_fields.dart';
+import 'package:azep_bus_app/pages/text_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
-  const ForgotPasswordPage({super.key});
-  //final PaswordControllerNew = TextEditingController();
 
   @override
   State<ForgotPasswordPage> createState() => _ForgotPasswordPageState();
@@ -76,13 +73,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     primary: Color(0xFF4885ED),
                   ),
                   onPressed: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => LoginPage(),
-                      ),
-                      ((route) => route.isFirst),
-                    );
+
                   },
                   child: Text(
                     'Save',

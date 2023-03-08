@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "90897657065",
+    "project_id": "location-42216",
+    "storage_bucket": "location-42216.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:90897657065:android:db282967e0a28285141478",
+        "android_client_info": {
+          "package_name": "com.azep.location_tracking"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "90897657065-ph4jdbemqkkig4f8k2h67snmjf3g0fgm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCK2eQiTwpgJXrXEMcgsMy6W_VK_FDtf1k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "90897657065-ph4jdbemqkkig4f8k2h67snmjf3g0fgm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

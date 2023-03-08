@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:azep_bus_app/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -137,12 +136,7 @@ class _BusListsState extends State<BusLists> {
               //Settings Button
               IconButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SettingsPage(),
-                    ),
-                  );
+
                 },
                 icon: Icon(
                   Icons.settings,
@@ -157,3 +151,5 @@ class _BusListsState extends State<BusLists> {
     );
   }
 }
+
+

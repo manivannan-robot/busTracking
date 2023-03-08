@@ -1,14 +1,11 @@
-// ignore_for_file: prefer_const_constructors
 
-import 'package:azep_bus_app/bus_lists.dart';
-import 'package:azep_bus_app/forgot_password.dart';
-import 'package:azep_bus_app/login_page.dart';
-import 'package:azep_bus_app/sos_page.dart';
+
+import 'package:azep_bus_app/pages/bus_lists_page.dart';
+import 'package:azep_bus_app/pages/forgot_password_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({super.key});
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
@@ -48,7 +45,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   SizedBox(
                     height: 47.0,
                   ),
-                  Image.asset('lib/images/Profile.png'),
+                  Image.asset('assets/images/Profile.png'),
                   SizedBox(
                     height: 6,
                   ),
@@ -126,12 +123,7 @@ class _SettingsPageState extends State<SettingsPage> {
               width: size.width,
               child: TextButton(
                 onPressed: () {
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SosPage(),
-                      ),
-                      ((route) => route.isFirst));
+
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -156,12 +148,7 @@ class _SettingsPageState extends State<SettingsPage> {
               width: size.width,
               child: TextButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => LoginPage(),
-                    ),
-                  );
+
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,

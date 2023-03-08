@@ -1,4 +1,4 @@
-import 'package:azep_bus_app/settings_page.dart';
+
 import 'package:flutter/material.dart';
 
 class SosPage extends StatelessWidget {
@@ -30,12 +30,7 @@ class SosPage extends StatelessWidget {
             //Settings Button
             IconButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SettingsPage(),
-                  ),
-                );
+
               },
               icon: Icon(
                 Icons.settings,

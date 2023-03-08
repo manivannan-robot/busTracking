@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:azep_bus_app/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -73,13 +72,7 @@ class _SchoolSelectPageState extends State<SchoolSelectPage> {
                                   fontWeight: FontWeight.w700),
                             ),
                             onPressed: () {
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => LoginPage(),
-                                ),
-                                ((route) => route.isFirst),
-                              );
+
                             },
                           ),
                         ),
@@ -168,12 +161,7 @@ class _SchoolSelectPageState extends State<SchoolSelectPage> {
                       primary: Color(0xFF4885ED),
                     ),
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => LoginPage(),
-                        ),
-                      );
+
                     },
                     child: Text(
                       'Next',

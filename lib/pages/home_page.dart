@@ -19,7 +19,6 @@ class _HomePageState extends State<HomePage> {
   Timer? _timer;
   List<String> _locations = [];
 
-  List<String> busses = ['bus1','bus2','bus3'];
   String? driverId;
   final database=FirebaseDatabase.instance.ref();
 

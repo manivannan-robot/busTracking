@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:azep_bus_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -112,38 +113,40 @@ class _SchoolSelectPageState extends State<SchoolSelectPage> {
                       borderRadius: BorderRadius.circular(5)),
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                    child: DropdownButton<String>(
-                      isExpanded: true,
-                      value: dropdownValue,
-                      icon: Icon(Icons.arrow_drop_down_rounded),
-                      style: GoogleFonts.inter(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xFF939393),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        isExpanded: true,
+                        value: dropdownValue,
+                        icon: Icon(Icons.arrow_drop_down_rounded),
+                        style: GoogleFonts.inter(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFF939393),
+                        ),
+                        onChanged: (String? value) {
+                          setState(() {
+                            dropdownValue = value!;
+                          });
+                        },
+                        items: const [
+                          DropdownMenuItem<String>(
+                            value: 'One',
+                            child: Text('Islamia. Mat. Hr. Sec  School'),
+                          ),
+                          DropdownMenuItem<String>(
+                            value: 'Two',
+                            child: Text('Cresent. Mat. Hr. Sec School'),
+                          ),
+                          DropdownMenuItem<String>(
+                            value: 'Three',
+                            child: Text('Mushraf. Mat. Hr. Sec School'),
+                          ),
+                          DropdownMenuItem<String>(
+                            value: 'Four',
+                            child: Text('Althaf Alluma. Arab School'),
+                          ),
+                        ],
                       ),
-                      onChanged: (String? value) {
-                        setState(() {
-                          dropdownValue = value!;
-                        });
-                      },
-                      items: const [
-                        DropdownMenuItem<String>(
-                          value: 'One',
-                          child: Text('Islamia. Mat. Hr. Sec  School'),
-                        ),
-                        DropdownMenuItem<String>(
-                          value: 'Two',
-                          child: Text('Cresent. Mat. Hr. Sec School'),
-                        ),
-                        DropdownMenuItem<String>(
-                          value: 'Three',
-                          child: Text('Mushraf. Mat. Hr. Sec School'),
-                        ),
-                        DropdownMenuItem<String>(
-                          value: 'Four',
-                          child: Text('Althaf Alluma. Arab School'),
-                        ),
-                      ],
                     ),
                   ),
                 ),
@@ -161,6 +164,7 @@ class _SchoolSelectPageState extends State<SchoolSelectPage> {
                       primary: Color(0xFF4885ED),
                     ),
                     onPressed: () {
+                      Navigator.pushNamed(context, AppRoutes.loginPage);
 
                     },
                     child: Text(

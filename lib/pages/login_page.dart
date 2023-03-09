@@ -170,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: Center(
                           child: TextButton(
                             onPressed: () {
-
+                                Navigator.pushNamed(context, AppRoutes.forgotPasswordPage);
                             },
                             child: Text(
                               'forgot password?',

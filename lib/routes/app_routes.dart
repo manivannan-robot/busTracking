@@ -2,6 +2,8 @@
 
 import 'package:azep_bus_app/pages/bus_lists_page.dart';
 import 'package:azep_bus_app/pages/home_page.dart';
+import 'package:azep_bus_app/pages/settings_page.dart';
+import 'package:azep_bus_app/pages/sos_page.dart';
 import 'package:flutter/cupertino.dart';
 
 
@@ -18,6 +20,9 @@ class AppRoutes {
   static const String busListPage='/bus_list_page';
   static const String schoolSelectPage='/school_select_page';
   static const String forgotPasswordPage='/forgot_password_page';
+  static const String settingsPage='/settings_page';
+  static const String sosPage='/sos_page';
+
 
 
   static Map<String, WidgetBuilder> routes = {
@@ -27,7 +32,8 @@ class AppRoutes {
     busListPage:(context)=>BusLists(),
     schoolSelectPage:(context)=>SchoolSelectPage(),
     forgotPasswordPage:(context)=>ForgotPasswordPage(),
-
+    settingsPage:(context)=>SettingsPage(),
+    sosPage:(context)=>SosPage(),
 
 
 

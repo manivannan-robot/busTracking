@@ -101,7 +101,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   Container(
                     width: 2,
-                    color: Colors.white,
+                    color: Colors.blue.shade900,
                   ),
                   MaterialButton(
                     child: Text(

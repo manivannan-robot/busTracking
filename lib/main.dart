@@ -95,7 +95,7 @@ class _SplashScreenState extends State<SplashScreen>
     var mobileNo = pref.getString("mobile_no");
     var selectedBus=pref.getString('selected_bus');
 
-    (mobileNo==null)?Navigator.of(context).pushReplacementNamed(AppRoutes.loginPage):Navigator.of(context).pushReplacementNamed(AppRoutes.homePage,arguments: mobileNo);
+    (mobileNo==null)?Navigator.of(context).pushReplacementNamed(AppRoutes.schoolSelectPage):Navigator.of(context).pushReplacementNamed(AppRoutes.homePage,arguments: mobileNo);
 
     debugPrint('MANI11 main MobileNo: $mobileNo , Bus:$selectedBus');
 

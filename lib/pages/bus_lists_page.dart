@@ -97,6 +97,7 @@ class _BusListsState extends State<BusLists> {
               ),
             ),
             SizedBox(
+
               height: 12,
             ),
             Padding(

@@ -3,9 +3,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class SosPage extends StatelessWidget {
-  const SosPage({super.key});
+import '../routes/app_routes.dart';
 
+class SosPage extends StatefulWidget {
+
+  @override
+  State<SosPage> createState() => _SosPageState();
+}
+
+class _SosPageState extends State<SosPage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -20,6 +26,7 @@ class SosPage extends StatelessWidget {
               style: GoogleFonts.inter(
                 fontSize: 20,
                 fontWeight: FontWeight.w900,
+
               ),
             ),
           ),
@@ -136,6 +143,7 @@ class SosPage extends StatelessWidget {
                   size: 35,
                   color: Color(0xFFF8F8F8),
                 ),
+
               ),
             ],
           ),

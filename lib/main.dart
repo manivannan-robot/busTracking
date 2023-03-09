@@ -15,7 +15,7 @@ import 'location/location_repo.dart';
 @pragma('vm:entry-point')
 void backgroundCallback() {
   BackgroundLocationTrackerManager.handleBackgroundUpdated(
-        (data) async => Repo().update(data),
+    (data) async => Repo().update(data),
   );
 }
 
@@ -49,7 +49,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -58,13 +57,7 @@ class _MyAppState extends State<MyApp> {
       routes: AppRoutes.routes,
     );
   }
-
 }
-
-
-
-
-
 
 //--- SPLASH SCREEN PAGE -------------------------------------------------------
 class SplashScreen extends StatefulWidget {
@@ -91,14 +84,15 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   Future<void> navigationPage() async {
-    SharedPreferences pref=await SharedPreferences.getInstance();
+    SharedPreferences pref = await SharedPreferences.getInstance();
     var mobileNo = pref.getString("mobile_no");
-    var selectedBus=pref.getString('selected_bus');
+    var selectedBus = pref.getString('selected_bus');
+
 
     (mobileNo==null)?Navigator.of(context).pushReplacementNamed(AppRoutes.schoolSelectPage):Navigator.of(context).pushReplacementNamed(AppRoutes.homePage,arguments: mobileNo);
 
-    debugPrint('MANI11 main MobileNo: $mobileNo , Bus:$selectedBus');
 
+    debugPrint('MANI11 main MobileNo: $mobileNo , Bus:$selectedBus');
   }
 
   @override
@@ -122,7 +116,7 @@ class _SplashScreenState extends State<SplashScreen>
           opacity: _animation,
           child: Padding(
             padding: const EdgeInsets.all(80),
-            child: Image.asset("assets/images/bus-png.png"),
+            child: Image.asset("assets/images/Profile.png"),
           ),
         ),
       ),

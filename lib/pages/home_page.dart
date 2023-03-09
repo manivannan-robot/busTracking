@@ -1,14 +1,16 @@
+// ignore_for_file: prefer_const_constructors, sort_child_properties_last
+
 import 'dart:async';
 
 import 'package:background_location_tracker/background_location_tracker.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../location/location_repo.dart';
 
 class HomePage extends StatefulWidget {
-
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -18,10 +20,8 @@ class _HomePageState extends State<HomePage> {
 
   Timer? _timer;
   List<String> _locations = [];
-
   String? driverId;
-  final database=FirebaseDatabase.instance.ref();
-
+  final database = FirebaseDatabase.instance.ref();
 
   @override
   void initState() {
@@ -36,78 +36,91 @@ class _HomePageState extends State<HomePage> {
     _timer?.cancel();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
-    driverId= ModalRoute.of(context)?.settings.arguments as String?;
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Location Tracking'),
-      ),
-      body: Container(
-        width: double.infinity,
-        child: Column(
-          children: [
-            Expanded(
-              child: Column(
+    var size = MediaQuery.of(context).size;
+    driverId = ModalRoute.of(context)?.settings.arguments as String?;
+    return SafeArea(
+      child: Scaffold(
+        body: Container(
+          width: double.infinity,
+          child: Column(
+            children: [
+              //custom AppBar
+              Container(
+                height: 105.68,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Color(0xFF4885ED),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(30),
+                    bottomRight: Radius.circular(30),
+                  ),
+                ),
+                child: Center(
+                  child: Text(
+                    'ISLAMIYAH SCHOOL',
+                    style: GoogleFonts.inter(
+                        color: Colors.white,
+                        fontSize: 25,
+                        fontWeight: FontWeight.w700),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 500,
+              ),
+            ],
+          ),
+        ),
+        bottomNavigationBar: Container(
+          color: Color(0xFF4885ED),
+          height: 93.68,
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 25.0, right: 25),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-
                   MaterialButton(
-                    child: const Text('Start Tracking'),
+                    child: Text(
+                      'Start Tracking',
+                      style: GoogleFonts.inter(
+                          fontSize: 18, fontWeight: FontWeight.w500),
+                    ),
                     onPressed: isTracking
                         ? null
                         : () async {
-                      await BackgroundLocationTrackerManager.startTracking();
-                      setState(() => isTracking = true);
-
-                    },
+                            await BackgroundLocationTrackerManager
+                                .startTracking();
+                            setState(() => isTracking = true);
+                          },
+                  ),
+                  Container(
+                    width: 2,
+                    color: Colors.blue.shade900,
                   ),
                   MaterialButton(
-                    child: const Text('Stop Tracking'),
+                    child: Text(
+                      'Stop Tracking',
+                      style: GoogleFonts.inter(
+                          fontSize: 18, fontWeight: FontWeight.w500),
+                    ),
                     onPressed: isTracking
                         ? () async {
-                      await LocationDao().clear();
-                      await _getLocations();
-                      await BackgroundLocationTrackerManager
-                          .stopTracking();
-                      setState(() => isTracking = false);
-                    }
+                            await LocationDao().clear();
+                            await _getLocations();
+                            await BackgroundLocationTrackerManager
+                                .stopTracking();
+                            setState(() => isTracking = false);
+                          }
                         : null,
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 8),
-            Container(
-              color: Colors.black12,
-              height: 2,
-            ),
-            const Text('Locations'),
-            MaterialButton(
-              child: const Text('Refresh locations'),
-              onPressed: _getLocations,
-            ),
-            Expanded(
-              child: Builder(
-                builder: (context) {
-                  if (_locations.isEmpty) {
-                    return const Text('No locations saved');
-                  }
-                  return ListView.builder(
-                    itemCount: _locations.length,
-                    itemBuilder: (context, index) => Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                      child: Text(
-                        _locations[index],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -127,13 +140,11 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-
-
-
   Future<void> _getLocations() async {
-
     final locations = await LocationDao().getLocations();
-    database.child('school/islamiyah/trips').set({'driverId':driverId,'location':locations});
+    database
+        .child('school/islamiyah/trips')
+        .set({'driverId': driverId, 'location': locations});
     setState(() {
       _locations = locations;
     });

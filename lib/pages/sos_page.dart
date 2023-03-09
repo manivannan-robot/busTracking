@@ -1,9 +1,15 @@
 
 import 'package:flutter/material.dart';
 
-class SosPage extends StatelessWidget {
-  const SosPage({super.key});
+import '../routes/app_routes.dart';
 
+class SosPage extends StatefulWidget {
+
+  @override
+  State<SosPage> createState() => _SosPageState();
+}
+
+class _SosPageState extends State<SosPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +22,9 @@ class SosPage extends StatelessWidget {
           children: [
             //Home Button
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, AppRoutes.busListPage);
+              },
               icon: Icon(
                 Icons.home_filled,
                 size: 35,
@@ -30,7 +38,7 @@ class SosPage extends StatelessWidget {
             //Settings Button
             IconButton(
               onPressed: () {
-
+                Navigator.pushNamed(context, AppRoutes.settingsPage);
               },
               icon: Icon(
                 Icons.settings,

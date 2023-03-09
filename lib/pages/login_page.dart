@@ -170,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: Center(
                           child: TextButton(
                             onPressed: () {
-
+                                Navigator.pushNamed(context, AppRoutes.forgotPasswordPage);
                             },
                             child: Text(
                               'forgot password?',
@@ -202,7 +202,7 @@ class _LoginPageState extends State<LoginPage> {
                         SharedPreferences pref= await SharedPreferences.getInstance();
                         pref.setString("mobile_no", mobileNo.toString());
 
-                        Navigator.pushNamed(context, AppRoutes.homePage,arguments: mobileNo);
+                        Navigator.pushNamed(context, AppRoutes.busListPage,arguments: mobileNo);
 
                         Fluttertoast.showToast(msg: '$mobileNo is your mobile no');
                       },

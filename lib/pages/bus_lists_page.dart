@@ -53,11 +53,16 @@ class _BusListsState extends State<BusLists> {
 
             Padding(
               padding: const EdgeInsets.only(right: 11.0, left: 11.0),
-              child: Container(
-                height: 48.68,
-                width: size.width,
-                decoration: BoxDecoration(
-                    color: Colors.grey, borderRadius: BorderRadius.circular(5)),
+              child: GestureDetector(
+                child: Container(
+                  height: 48.68,
+                  width: size.width,
+                  decoration: BoxDecoration(
+                      color: Colors.grey, borderRadius: BorderRadius.circular(5)),
+                ),
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.homePage,arguments: '9840119746');
+                },
               ),
             ),
             SizedBox(

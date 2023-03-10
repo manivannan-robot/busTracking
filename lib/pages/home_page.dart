@@ -6,6 +6,7 @@ import 'package:background_location_tracker/background_location_tracker.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../location/location_repo.dart';
@@ -22,6 +23,7 @@ class _HomePageState extends State<HomePage> {
   List<String> _locations = [];
   String? driverId;
   final database = FirebaseDatabase.instance.ref();
+   GoogleMapController? _googleMapController;
 
   @override
   void initState() {
@@ -45,8 +47,17 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         body: Container(
           width: double.infinity,
-          child: Column(
+          child: Stack(
             children: [
+              GoogleMap(
+                myLocationEnabled: true,
+                initialCameraPosition: CameraPosition(target: LatLng(10.975441058345867, 76.96307198169293)),
+                onMapCreated: (GoogleMapController controller){
+                  setState(() {
+                    _googleMapController=controller;
+                  });
+                },
+              ),
               //custom AppBar
               Container(
                 height: 105.68,
@@ -68,9 +79,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 500,
-              ),
+
             ],
           ),
         ),

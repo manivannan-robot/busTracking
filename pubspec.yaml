@@ -45,6 +45,8 @@ dependencies:
   firebase_database: ^10.0.14
   fluttertoast: ^8.2.1
   google_maps_flutter: ^2.2.5
+  http: ^0.13.5
+  motion_toast: ^2.6.5
 
 
 dev_dependencies:

@@ -59,6 +59,7 @@ class _HomePageState extends State<HomePage> {
           child: Stack(
             children: [
               GoogleMap(
+                padding:EdgeInsets.only(top: 80.0,),
                 myLocationButtonEnabled: true,
                 myLocationEnabled: true,
                 initialCameraPosition: CameraPosition(target: LatLng(10.975441058345867, 76.96307198169293),zoom: 17),
@@ -136,6 +137,7 @@ class _HomePageState extends State<HomePage> {
                             setState(() => isTracking = false);
 
                             Navigator.pushNamed(context, AppRoutes.busListPage);
+                           
                           }
                         : null,
                   ),
@@ -182,8 +184,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _getStreaming() async{
-    var location = await LocationDao1().getLocationsData();
-    debugPrint("MANI HOMEPAGE ${location}");
+    final locations = await LocationDao().getLocations();
+    debugPrint("MANI HOMEPAGE ${locations}");
 
 
       // BackgroundLocationTrackerManager.handleBackgroundUpdated((data) async {

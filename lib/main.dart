@@ -116,7 +116,7 @@ class _SplashScreenState extends State<SplashScreen>
           opacity: _animation,
           child: Padding(
             padding: const EdgeInsets.all(80),
-            child: Image.asset("assets/images/Profile.png"),
+            child: Image.asset("assets/images/bus-png.png"),
           ),
         ),
       ),

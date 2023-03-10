@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:azep_bus_app/routes/app_routes.dart';
 import 'package:background_location_tracker/background_location_tracker.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,15 @@ class _HomePageState extends State<HomePage> {
   List<String> _locations = [];
   String? driverId;
   final database = FirebaseDatabase.instance.ref();
-   GoogleMapController? _googleMapController;
+   GoogleMapController? mapController;
+
+
+
+
+
+
+
+
 
   @override
   void initState() {
@@ -50,12 +59,14 @@ class _HomePageState extends State<HomePage> {
           child: Stack(
             children: [
               GoogleMap(
+                myLocationButtonEnabled: true,
                 myLocationEnabled: true,
-                initialCameraPosition: CameraPosition(target: LatLng(10.975441058345867, 76.96307198169293)),
+                initialCameraPosition: CameraPosition(target: LatLng(10.975441058345867, 76.96307198169293),zoom: 17),
                 onMapCreated: (GoogleMapController controller){
                   setState(() {
-                    _googleMapController=controller;
+                    mapController=controller;
                   });
+                  _getStreaming();
                 },
               ),
               //custom AppBar
@@ -123,6 +134,8 @@ class _HomePageState extends State<HomePage> {
                             await BackgroundLocationTrackerManager
                                 .stopTracking();
                             setState(() => isTracking = false);
+
+                            Navigator.pushNamed(context, AppRoutes.busListPage);
                           }
                         : null,
                   ),
@@ -162,6 +175,31 @@ class _HomePageState extends State<HomePage> {
   void _startLocationsUpdatesStream() {
     _timer?.cancel();
     _timer = Timer.periodic(
-        const Duration(milliseconds: 2500), (timer) => _getLocations());
+        const Duration(milliseconds: 250), (timer){
+          _getLocations();
+          _getStreaming();
+        });
   }
+
+  void _getStreaming() async{
+    var location = await LocationDao1().getLocationsData();
+    debugPrint("MANI HOMEPAGE ${location}");
+
+
+      // BackgroundLocationTrackerManager.handleBackgroundUpdated((data) async {
+      //   debugPrint("MANI HOMEPAGE ${data.lat}");
+      //   mapController?.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(data.lat ,data.lon),zoom: 17)));
+      // });
+
+
+
+  }
+
+  @override
+  void deactivate() {
+    super.deactivate();
+
+
+  }
+
 }

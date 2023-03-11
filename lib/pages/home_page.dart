@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors, sort_child_properties_last
 
 import 'dart:async';
-import 'dart:html';
 
 import 'package:azep_bus_app/pages/wigdets/nav_bar.dart';
 import 'package:background_location_tracker/background_location_tracker.dart';
@@ -88,10 +87,21 @@ class _HomePageState extends State<HomePage> {
             Column(
               children: [
                 SizedBox(
-                  height: size.height * 0.65,
+                  height: size.height * 0.735,
                 ),
                 Center(
-                  child: ElevatedButton(onPressed: () {}, child: Text('Stata')),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      isTracking
+                          ? null
+                          : () async {
+                              await BackgroundLocationTrackerManager
+                                  .startTracking();
+                              setState(() => isTracking = true);
+                            };
+                    },
+                    child: Text('Start/Stop'),
+                  ),
                 ),
               ],
             ),

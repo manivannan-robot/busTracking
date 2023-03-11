@@ -21,7 +21,7 @@ class AppRoutes {
   static const String schoolSelectPage='/school_select_page';
   static const String forgotPasswordPage='/forgot_password_page';
   static const String settingsPage='/settings_page';
-  static const String sosPage='/sos_page';
+  static const String sosPage='/sos_page'; 
 
 
 

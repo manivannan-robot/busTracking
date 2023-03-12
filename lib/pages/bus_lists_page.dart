@@ -1,17 +1,31 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:convert';
+
+import 'package:azep_bus_app/api/bus_list_api.dart';
 import 'package:azep_bus_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../models/bus_list_model.dart';
 
 class BusLists extends StatefulWidget {
-  const BusLists({super.key});
 
   @override
   State<BusLists> createState() => _BusListsState();
 }
 
 class _BusListsState extends State<BusLists> {
+
+ BusListResponse?  busListResponse;
+  @override
+  void initState() {
+    super.initState();
+    getBusListFunction();
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -160,6 +174,26 @@ class _BusListsState extends State<BusLists> {
       ),
     );
   }
+
+
+  void getBusListFunction() {
+    var busListAPI=BusListAPI(context: context);
+    busListAPI.busList().then((value) async {
+
+    if (value.statusCode == 200) {
+      busListResponse = BusListResponse.fromJson(jsonDecode(value.body));
+
+    Fluttertoast.showToast(msg: busListResponse!.message!);
+   // Navigator.pushReplacementNamed(context, AppRoutes.homePage);
+    } else {
+    Fluttertoast.showToast(msg: jsonDecode(value.body)['message']);
+
+    }
+
+     });
+  }
+
+
 }
 
 

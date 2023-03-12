@@ -10,24 +10,23 @@ import '../models/login_model.dart';
 import 'api_helper.dart';
 import 'custom_exceptions.dart';
 
-class LoginAPI {
-  LoginAPI({required this.context});
+class BusListAPI {
+  BusListAPI({required this.context});
 
   final BuildContext context;
-  Future<dynamic> login(LoginRequestBody requestBody) async {
+  Future<dynamic> busList() async {
 
-    debugPrint('LOGIN API REQUEST : ${requestBody.toJson()}');
+    debugPrint('BUSLIST API REQUEST :');
     http.Response responseStatus;
 
     try {
-      final response = await http.post(
-        Uri.parse(ApiBaseUrl.baseUrl + ApiEndPoint.loginEndPoint),
-        body: json.encode(requestBody.toJson()),
+      final response = await http.get(
+        Uri.parse(ApiBaseUrl.baseUrl + ApiEndPoint.busListEndPoint),
       );
-      debugPrint('LOGIN API RESPONSE : ${requestBody.toJson()}');
+       debugPrint('LOGIN API RESPONSE : $response}');
       responseStatus = response;
     } on SocketException {
-         Fluttertoast.showToast(msg:"No Internet connection. Please Try Again Later!");
+      Fluttertoast.showToast(msg:"No Internet connection. Please Try Again Later!");
       throw FetchDataException('No Internet connection');
     }
     return responseStatus;

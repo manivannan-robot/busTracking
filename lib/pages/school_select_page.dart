@@ -1,20 +1,35 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:convert';
+
+import 'package:azep_bus_app/api/school_list_api.dart';
 import 'package:azep_bus_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class SchoolSelectPage extends StatefulWidget {
-  const SchoolSelectPage({super.key});
+import '../models/school_list_model.dart';
+import '../utils/constants.dart';
+import '../utils/size.dart';
 
+class SchoolSelectPage extends StatefulWidget {
   @override
   State<SchoolSelectPage> createState() => _SchoolSelectPageState();
 }
 
 class _SchoolSelectPageState extends State<SchoolSelectPage> {
   String dropdownValue = 'One';
+  var schoolListAPI=SchoolListAPI();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+
   @override
   Widget build(BuildContext context) {
+
     var size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
@@ -103,54 +118,22 @@ class _SchoolSelectPageState extends State<SchoolSelectPage> {
               const SizedBox(
                 height: 6,
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 48.0, right: 48.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Color(0xFF939393),
-                      ),
-                      borderRadius: BorderRadius.circular(5)),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        isExpanded: true,
-                        value: dropdownValue,
-                        icon: Icon(Icons.arrow_drop_down_rounded),
-                        style: GoogleFonts.inter(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xFF939393),
-                        ),
-                        onChanged: (String? value) {
-                          setState(() {
-                            dropdownValue = value!;
-                          });
-                        },
-                        items: const [
-                          DropdownMenuItem<String>(
-                            value: 'One',
-                            child: Text('Islamia. Mat. Hr. Sec  School'),
-                          ),
-                          DropdownMenuItem<String>(
-                            value: 'Two',
-                            child: Text('Cresent. Mat. Hr. Sec School'),
-                          ),
-                          DropdownMenuItem<String>(
-                            value: 'Three',
-                            child: Text('Mushraf. Mat. Hr. Sec School'),
-                          ),
-                          DropdownMenuItem<String>(
-                            value: 'Four',
-                            child: Text('Althaf Alluma. Arab School'),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              // Expanded(
+              //   child: FutureBuilder(
+              //   future: schoolListAPI.schoolList(),
+              //       builder: (context, snapshot) {
+              //         if (!snapshot.hasData &&
+              //             snapshot.connectionState ==
+              //                 ConnectionState.waiting) {
+              //           return const CircularProgressIndicator();
+              //         }else{
+              //           var res =SchoolListResponse.fromJson(snapshot.data);
+              //           return Text('${res.message}');
+              //         }
+              //
+              //       }
+              //   ),
+              // ),
               const SizedBox(
                 height: 30,
               ),
@@ -181,4 +164,7 @@ class _SchoolSelectPageState extends State<SchoolSelectPage> {
       ),
     );
   }
+
+
 }
+

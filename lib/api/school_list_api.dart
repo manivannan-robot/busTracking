@@ -12,6 +12,9 @@ import 'api_helper.dart';
 import 'custom_exceptions.dart';
 
 class SchoolListAPI {
+  dynamic result;
+  Response? response;
+  Map<String, dynamic>? data;
 
 
   Future<dynamic> schoolList() async {

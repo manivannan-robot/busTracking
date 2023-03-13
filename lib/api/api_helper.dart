@@ -1,6 +1,6 @@
 const String uatServerBaseUrl = 'https://dev-bee.com/devbee-school/';
 const String liveServerBaseUrl = 'http://43.206.124.140/live/';
-const String localServerBaseUrl='http://192.168.0.103/smart-school/';
+const String localServerBaseUrl='http://192.168.0.147/smart-school/';
 
 const String versionName = '1.1.0'; //TODO: NEED TO CHANGE BEFORE BUILD
 

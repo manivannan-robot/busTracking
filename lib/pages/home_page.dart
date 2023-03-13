@@ -224,8 +224,16 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void _getStreaming() async {
-    var location = await LocationDao1().getLocationsData();
+
+  void _getStreaming() async{
+    final locations = await LocationDao().getLocations();
+    debugPrint("MANI HOMEPAGE ${locations}");
+
+
+      // BackgroundLocationTrackerManager.handleBackgroundUpdated((data) async {
+      //   debugPrint("MANI HOMEPAGE ${data.lat}");
+      //   mapController?.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(data.lat ,data.lon),zoom: 17)));
+      // });
 
     //debugPrint("MANI HOMEPAGE ${location}");
     // mapController?.animateCamera(CameraUpdate.newCameraPosition(

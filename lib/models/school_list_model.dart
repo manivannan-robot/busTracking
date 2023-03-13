@@ -6,29 +6,34 @@ class SchoolListResponseData {
 {
   "id": "1",
   "school_id": "1",
-  "base_url": "\"http://localhost/smart-school/\""
+  "base_url": "\"http://localhost/smart-school/\"",
+  "school_name": "islamiyah School"
 }
 */
 
   String? id;
   String? schoolId;
   String? baseUrl;
+  String? schoolName;
 
   SchoolListResponseData({
     this.id,
     this.schoolId,
     this.baseUrl,
+    this.schoolName,
   });
   SchoolListResponseData.fromJson(Map<String, dynamic> json) {
     id = json['id']?.toString();
     schoolId = json['school_id']?.toString();
     baseUrl = json['base_url']?.toString();
+    schoolName = json['school_name']?.toString();
   }
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     data['id'] = id;
     data['school_id'] = schoolId;
     data['base_url'] = baseUrl;
+    data['school_name'] = schoolName;
     return data;
   }
 }
@@ -41,7 +46,8 @@ class SchoolListResponse {
     {
       "id": "1",
       "school_id": "1",
-      "base_url": "\"http://localhost/smart-school/\""
+      "base_url": "\"http://localhost/smart-school/\"",
+      "school_name": "islamiyah School"
     }
   ]
 }

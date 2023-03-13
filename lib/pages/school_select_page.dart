@@ -18,17 +18,21 @@ class SchoolSelectPage extends StatefulWidget {
 }
 
 class _SchoolSelectPageState extends State<SchoolSelectPage> {
-  String dropdownValue = 'One';
-  var schoolListAPI=SchoolListAPI();
+
+  List<SchoolListResponseData?>? schoolList;
+  String? selectedSchool;
 
   @override
   void initState() {
     super.initState();
+    getSchoolListFunction();
   }
 
 
   @override
   Widget build(BuildContext context) {
+
+
 
     var size = MediaQuery.of(context).size;
     return SafeArea(
@@ -118,22 +122,43 @@ class _SchoolSelectPageState extends State<SchoolSelectPage> {
               const SizedBox(
                 height: 6,
               ),
-              // Expanded(
-              //   child: FutureBuilder(
-              //   future: schoolListAPI.schoolList(),
-              //       builder: (context, snapshot) {
-              //         if (!snapshot.hasData &&
-              //             snapshot.connectionState ==
-              //                 ConnectionState.waiting) {
-              //           return const CircularProgressIndicator();
-              //         }else{
-              //           var res =SchoolListResponse.fromJson(snapshot.data);
-              //           return Text('${res.message}');
-              //         }
-              //
-              //       }
-              //   ),
-              // ),
+
+               Padding(
+                 padding: EdgeInsets.only(left:48,right: 48),
+                 child: Container(
+                   decoration: BoxDecoration(
+                       border: Border.all(
+                         color: Color(0xFF939393),
+                       ),
+                       borderRadius: BorderRadius.circular(5)),
+                   child: Padding(
+                     padding: EdgeInsets.only(left: 8,right: 8),
+                     child: Row(
+                       children: [
+                         Expanded(child: DropdownButtonHideUnderline(
+                           child: DropdownButton<String>(
+                             hint: Text('Select School'),
+                             value: selectedSchool,
+                             items:schoolList?.map((item) {
+                               print(item);
+                               return DropdownMenuItem(
+                                 value: item?.id,
+                                 child:Text(item!.schoolName!),
+                               );
+                             }).toList(),
+                             onChanged: (value) {
+                               setState(() {
+                                 selectedSchool=(value as String?)!;
+                               });
+                             },
+                           ),
+                         )),
+                       ],
+                     ),
+                   ),
+                 ),
+               ),
+
               const SizedBox(
                 height: 30,
               ),
@@ -163,6 +188,30 @@ class _SchoolSelectPageState extends State<SchoolSelectPage> {
         ),
       ),
     );
+  }
+
+
+  Future<void> getSchoolListFunction() async{
+     var schoolListAPI=SchoolListAPI();
+    schoolListAPI.schoolList().then((value) async {
+
+      if (value.statusCode == 200) {
+          var schoolListResponse =SchoolListResponse.fromJson(jsonDecode(value.body));
+         print('SCHOOL LIST PAGE ${schoolListResponse.data}');
+
+         setState(() {
+           schoolList =schoolListResponse.data ;
+         });
+
+
+        Fluttertoast.showToast(msg: schoolListResponse.message!);
+        // Navigator.pushReplacementNamed(context, AppRoutes.homePage);
+      } else {
+        Fluttertoast.showToast(msg: jsonDecode(value.body)['message']);
+
+      }
+
+    });
   }
 
 

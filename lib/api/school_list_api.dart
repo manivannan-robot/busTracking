@@ -12,9 +12,6 @@ import 'api_helper.dart';
 import 'custom_exceptions.dart';
 
 class SchoolListAPI {
-  dynamic result;
-  Response? response;
-  Map<String, dynamic>? data;
 
 
   Future<dynamic> schoolList() async {
@@ -26,8 +23,9 @@ class SchoolListAPI {
       final response = await http.get(
         Uri.parse(ApiBaseUrl.baseUrl + ApiEndPoint.schoolListEndPoint),
       );
-      debugPrint('LOGIN API RESPONSE : $response}');
       responseStatus = response;
+
+      debugPrint('SCHOOL LIST RESPONSE : ${responseStatus.body}}');
     } on SocketException {
       Fluttertoast.showToast(msg:"No Internet connection. Please Try Again Later!");
       throw FetchDataException('No Internet connection');

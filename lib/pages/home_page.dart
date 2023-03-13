@@ -44,7 +44,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    driverId = ModalRoute.of(context)?.settings.arguments as String?;
     return SafeArea(
       child: Scaffold(
         body: Stack(

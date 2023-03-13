@@ -85,14 +85,13 @@ class _SplashScreenState extends State<SplashScreen>
 
   Future<void> navigationPage() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    var mobileNo = pref.getString("mobile_no");
-    var selectedBus = pref.getString('selected_bus');
+    var userId = pref.getString("User-Id");
 
 
-    (mobileNo==null)?Navigator.of(context).pushReplacementNamed(AppRoutes.schoolSelectPage):Navigator.of(context).pushReplacementNamed(AppRoutes.homePage,arguments: mobileNo);
+    (userId==null)?Navigator.of(context).pushReplacementNamed(AppRoutes.schoolSelectPage):Navigator.of(context).pushReplacementNamed(AppRoutes.busListPage);
 
 
-    debugPrint('MANI11 main MobileNo: $mobileNo , Bus:$selectedBus');
+    debugPrint('MANI11 main userId: $userId ');
   }
 
   @override

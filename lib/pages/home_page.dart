@@ -89,18 +89,22 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(
                   height: size.height * 0.735,
                 ),
-                Center(
+                Visibility(
+                  visible: !isTracking,
                   child: ElevatedButton(
                     onPressed: () {
-                      isTracking
-                          ? null
-                          : () async {
-                              await BackgroundLocationTrackerManager
-                                  .startTracking();
-                              setState(() => isTracking = true);
-                            };
+
                     },
-                    child: Text('Start/Stop'),
+                    child: Text('Start Trip'),
+                  ),
+                ),
+                Visibility(
+                  visible: isTracking,
+                  child: ElevatedButton(
+                    onPressed: () {
+
+                    },
+                    child: Text('Stop Trip'),
                   ),
                 ),
               ],
@@ -110,82 +114,6 @@ class _HomePageState extends State<HomePage> {
 
         //BottomNavigationBar
         bottomNavigationBar: NavBar(),
-
-        // bottomNavigationBar: Container(
-        //   color: Color(0xFF4885ED),
-        //   height: 93.68,
-        //   child: Center(
-        //     child: Padding(
-        //       padding: const EdgeInsets.only(left: 25.0, right: 25),
-        //       child: Row(
-        //         mainAxisAlignment: MainAxisAlignment.center,
-        //         children: [
-        //           //Home Button
-        //           IconButton(
-        //             onPressed: () {},
-        //             icon: Icon(
-        //               Icons.home_filled,
-        //               size: 35,
-        //               color: Color(0xFFF8F8F8),
-        //             ),
-        //           ),
-        //           SizedBox(
-        //             width: 65,
-        //           ),
-
-        //           //Settings Button
-        //           IconButton(
-        //             onPressed: () {
-        //               // Navigator.pushNamed(context, AppRoutes.settingsPage);
-        //             },
-        //             icon: Icon(
-        //               Icons.settings,
-        //               size: 35,
-        //               color: Color(0xFFF8F8F8),
-        //             ),
-        //           ),
-
-        //           // MaterialButton(
-        //           //   child: Text(
-        //           //     'Start Tracking',
-        //           //     style: GoogleFonts.inter(
-        //           //         fontSize: 18, fontWeight: FontWeight.w500),
-        //           //   ),
-        //           //   onPressed: isTracking
-        //           //       ? null
-        //           //       : () async {
-        //           //           await BackgroundLocationTrackerManager
-        //           //               .startTracking();
-        //           //           setState(() => isTracking = true);
-        //           //         },
-        //           // ),
-        //           // Container(
-        //           //   width: 2,
-        //           //   color: Colors.blue.shade900,
-        //           // ),
-        //           // MaterialButton(
-        //           //   child: Text(
-        //           //     'Stop Tracking',
-        //           //     style: GoogleFonts.inter(
-        //           //         fontSize: 18, fontWeight: FontWeight.w500),
-        //           //   ),
-        //           //   onPressed: isTracking
-        //           //       ? () async {
-        //           //           await LocationDao().clear();
-        //           //           await _getLocations();
-        //           //           await BackgroundLocationTrackerManager
-        //           //               .stopTracking();
-        //           //           setState(() => isTracking = false);
-
-        //           //           Navigator.pushNamed(context, AppRoutes.busListPage);
-        //           //         }
-        //           //       : null,
-        //           // ),
-        //         ],
-        //       ),
-        //     ),
-        //   ),
-        // ),
       ),
     );
   }
@@ -206,14 +134,13 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _getLocations() async {
     final locations = await LocationDao().getLocations();
-    //final currentLocation = LocationDao().getLocations();
-    database
-        .child('school/islamiyah/trips')
+    debugPrint("Current Location${locations}");
+    database.child('school/islamiyah/trips')
         .set({'driverId': driverId, 'location': locations});
     setState(() {
       _locations = locations;
     });
-    //debugPrint("Current Location${currentLocation}");
+
   }
 
   void _startLocationsUpdatesStream() {
@@ -229,17 +156,6 @@ class _HomePageState extends State<HomePage> {
     final locations = await LocationDao().getLocations();
     debugPrint("MANI HOMEPAGE ${locations}");
 
-
-      // BackgroundLocationTrackerManager.handleBackgroundUpdated((data) async {
-      //   debugPrint("MANI HOMEPAGE ${data.lat}");
-      //   mapController?.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(data.lat ,data.lon),zoom: 17)));
-      // });
-
-    //debugPrint("MANI HOMEPAGE ${location}");
-    // mapController?.animateCamera(CameraUpdate.newCameraPosition(
-    //     CameraPosition(target: LatLng(data.lat, data.lon), zoom: 17)));
-
-    //debugPrint("My Tracker${location}");
 
     // BackgroundLocationTrackerManager.handleBackgroundUpdated((data) async {
     //   debugPrint("MANI HOMEPAGE ${data.lat}");

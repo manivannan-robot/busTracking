@@ -24,6 +24,7 @@ class _SchoolSelectPageState extends State<SchoolSelectPage> {
 
   List<SchoolListResponseData?>? schoolList;
   String? selectedSchool;
+  DateTime? currentBackPressTime;
 
   @override
   void initState() {
@@ -227,16 +228,20 @@ class _SchoolSelectPageState extends State<SchoolSelectPage> {
   }
 
   Future<bool> _onBackButtonClicked(BuildContext context) async {
-    var backpressedTime;
-    final difference=DateTime.now().difference(backpressedTime);
-    backpressedTime=DateTime.now();
-    if(difference>=const Duration(seconds: 2)){
-      Fluttertoast.showToast(msg: "Press the back Button again to exit");
+    final now = DateTime.now();
+    if (currentBackPressTime == null ||
+        now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
+      currentBackPressTime = now;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Press again to exit'),
+          duration: Duration(seconds: 2),
+        ),
+      );
       return false;
-    }else{
-      SystemNavigator.pop(animated: true);
-      return true;
     }
+    SystemNavigator.pop();
+    return true;
   }
 
 

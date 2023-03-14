@@ -23,88 +23,75 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return SafeArea(
-      child: WillPopScope(
-        onWillPop: ()=>_onBackButtonClicked(context),
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: Column(
-            children: [
-              SizedBox(
-                height: 260,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 48.0, right: 48.0),
-                child: MyTextField(
-                    controller: PasswordControllerOld,
-                    hintText: 'Old Password',
-                    obscureText: true),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 48.0, right: 48.0),
-                child: MyTextField(
-                    controller: PaswordControllerNew,
-                    hintText: 'New Password',
-                    obscureText: true),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 48.0, right: 48.0),
-                child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Color(0xFF939393),
-                      ),
-                    ),
-                    child: MyPasswordField(
-                      controller: PasswordControllerTFF,
-                      hintText: 'Confirm Password',
-                    )),
-              ),
-              SizedBox(
-                height: 33,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 48.0, right: 48.0),
-                child: SizedBox(
-                  width: size.width,
-                  height: 39,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Color(0xFF4885ED),
-                    ),
-                    onPressed: () {
-
-                    },
-                    child: Text(
-                      'Save',
-                      style: GoogleFonts.inter(
-                          fontSize: 20, fontWeight: FontWeight.w700),
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Column(
+          children: [
+            SizedBox(
+              height: 260,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 48.0, right: 48.0),
+              child: MyTextField(
+                  controller: PasswordControllerOld,
+                  hintText: 'Old Password',
+                  obscureText: true),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 48.0, right: 48.0),
+              child: MyTextField(
+                  controller: PaswordControllerNew,
+                  hintText: 'New Password',
+                  obscureText: true),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 48.0, right: 48.0),
+              child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Color(0xFF939393),
                     ),
                   ),
+                  child: MyPasswordField(
+                    controller: PasswordControllerTFF,
+                    hintText: 'Confirm Password',
+                  )),
+            ),
+            SizedBox(
+              height: 33,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 48.0, right: 48.0),
+              child: SizedBox(
+                width: size.width,
+                height: 39,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Color(0xFF4885ED),
+                  ),
+                  onPressed: () {
+
+                  },
+                  child: Text(
+                    'Save',
+                    style: GoogleFonts.inter(
+                        fontSize: 20, fontWeight: FontWeight.w700),
+                  ),
                 ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
       ),
     );
   }
 
 
-      Future<bool> _onBackButtonClicked(BuildContext context) async {
-        final difference = DateTime.now().difference(backpressedTime);
-         backpressedTime = DateTime.now();
-        if (difference >= const Duration(seconds: 2)) {
-          Fluttertoast.showToast(msg: "Press the back Button again to exit");
-          return false;
-        } else {
-          SystemNavigator.pop(animated: true);
-          return true;
-        }
-      }
+
 }

@@ -9,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/bus_list_model.dart';
+import '../models/trip_starting_arguments.dart';
 import '../utils/constants.dart';
 import '../utils/size.dart';
 
@@ -19,11 +20,13 @@ class BusLists extends StatefulWidget {
 
 class _BusListsState extends State<BusLists> {
     var busListAPI=BusListAPI();
+    var userId;
+    var schoolId;
 
   @override
   void initState() {
     super.initState();
-    //getBusListFunction();
+    getArguments();
   }
 
   @override
@@ -69,7 +72,7 @@ class _BusListsState extends State<BusLists> {
                   if (!snapshot.hasData &&
                       snapshot.connectionState ==
                           ConnectionState.waiting) {
-                    return  const SizedBox(width: 200,height: 200,child: CircularProgressIndicator(),);
+                    return  Transform.scale(scale: 0.5, child: CircularProgressIndicator(strokeWidth: 2,));
                   } else {
                     print('BUS LIST future builder ${snapshot.data}');
                     var res = BusListResponse.fromJson(snapshot.data);
@@ -109,7 +112,7 @@ class _BusListsState extends State<BusLists> {
                             ),
                             child: GestureDetector(
                               onTap: (){
-                                Navigator.pushNamed(context, AppRoutes.homePage);
+                                Navigator.pushReplacementNamed(context, AppRoutes.homePage,arguments:TripStartArguments(busId:'${res.data![i]!.busId}',userId: userId,schoolId:schoolId));
                               },
                               child: Column(
                                 children: [
@@ -180,6 +183,7 @@ class _BusListsState extends State<BusLists> {
               //Home Button
               IconButton(
                 onPressed: () {
+                  Navigator.pushReplacementNamed(context, AppRoutes.busListPage);
 
                 },
                 icon: Icon(
@@ -195,7 +199,7 @@ class _BusListsState extends State<BusLists> {
               //Settings Button
               IconButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, AppRoutes.settingsPage);
+                  Navigator.pushReplacementNamed(context, AppRoutes.settingsPage);
 
                 },
                 icon: Icon(
@@ -231,6 +235,13 @@ class _BusListsState extends State<BusLists> {
     }
 
      });
+  }
+
+  void getArguments() async{
+    SharedPreferences pref=await SharedPreferences.getInstance();
+    userId= pref.getString('User-Id');
+    schoolId=pref.getString('School-Id');
+    
   }
 
 

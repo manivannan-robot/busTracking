@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 
+import '../../routes/app_routes.dart';
+
 class NavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -17,7 +19,9 @@ class NavBar extends StatelessWidget {
               children: [
                 //Home Button
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(context, AppRoutes.busListPage);
+                  },
                   icon: Icon(
                     Icons.home_filled,
                     size: 35,
@@ -31,7 +35,7 @@ class NavBar extends StatelessWidget {
                 //Settings Button
                 IconButton(
                   onPressed: () {
-                    // Navigator.pushNamed(context, AppRoutes.settingsPage);
+                     Navigator.pushReplacementNamed(context, AppRoutes.settingsPage);
                   },
                   icon: Icon(
                     Icons.settings,

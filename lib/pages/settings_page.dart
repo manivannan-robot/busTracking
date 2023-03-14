@@ -5,6 +5,7 @@ import 'package:azep_bus_app/pages/forgot_password_page.dart';
 import 'package:azep_bus_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends StatefulWidget {
 
@@ -119,7 +120,7 @@ class _SettingsPageState extends State<SettingsPage> {
               width: size.width,
               child: TextButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, AppRoutes.sosPage);
+                  Navigator.pushReplacementNamed(context, AppRoutes.sosPage);
 
                 },
                 child: Row(
@@ -144,7 +145,10 @@ class _SettingsPageState extends State<SettingsPage> {
               height: 53,
               width: size.width,
               child: TextButton(
-                onPressed: () {
+                onPressed: () async{
+                  SharedPreferences pref=await SharedPreferences.getInstance();
+                  pref.clear();
+                  Navigator.pushReplacementNamed(context, AppRoutes.schoolSelectPage);
 
                 },
                 child: Row(
@@ -177,7 +181,7 @@ class _SettingsPageState extends State<SettingsPage> {
             children: [
               IconButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, AppRoutes.busListPage);
+                  Navigator.pushReplacementNamed(context, AppRoutes.busListPage);
                 },
                 icon: Icon(
                   Icons.home_filled,
@@ -190,7 +194,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               IconButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, AppRoutes.settingsPage);
+                  Navigator.pushReplacementNamed(context, AppRoutes.settingsPage);
                 },
                 icon: Icon(
                   Icons.settings,

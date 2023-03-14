@@ -88,7 +88,7 @@ class _SplashScreenState extends State<SplashScreen>
     var userId = pref.getString("User-Id");
 
 
-    (userId==null)?Navigator.of(context).pushReplacementNamed(AppRoutes.schoolSelectPage):Navigator.of(context).pushReplacementNamed(AppRoutes.busListPage);
+    (userId==null)?Navigator.of(context).pushNamed(AppRoutes.schoolSelectPage):Navigator.of(context).pushReplacementNamed(AppRoutes.busListPage);
 
 
     debugPrint('MANI11 main userId: $userId ');

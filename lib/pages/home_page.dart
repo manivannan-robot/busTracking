@@ -2,10 +2,12 @@
 
 import 'dart:async';
 
-import 'package:azep_bus_app/pages/wigdets/nav_bar.dart';
+import 'package:azep_bus_app/routes/app_routes.dart';
 import 'package:background_location_tracker/background_location_tracker.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -30,6 +32,8 @@ class _HomePageState extends State<HomePage> {
   var busId ;
   var schoolId ;
   var userId ;
+  DateTime? currentBackPressTime;
+
 
 
   @override
@@ -48,6 +52,45 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+
+    void showDialogue(BuildContext context, String homeOrSetting){
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Confirmation"),
+            content: Text("Do you need to cancel the trip?"),
+            actions: <Widget>[
+              TextButton(
+                child: Text("No"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: Text("Yes"),
+                onPressed: () async{
+                  if(isTracking) {
+                    await LocationDao().clear();
+                    await _getLocations();
+                    await BackgroundLocationTrackerManager.stopTracking();
+                  }
+
+                  if(homeOrSetting=='home'){
+                    Navigator.pushNamed(context, AppRoutes.homePage);
+                  }else{
+                    Navigator.pushNamed(context, AppRoutes.settingsPage);
+
+                  }
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+
+    }
     var size = MediaQuery.of(context).size;
     TripStartArguments arguments = ModalRoute.of(context)?.settings.arguments as TripStartArguments;
 
@@ -56,99 +99,146 @@ class _HomePageState extends State<HomePage> {
     userId = arguments.userId;
 
     return SafeArea(
-      child: Scaffold(
-        body: Stack(
-          children: [
-            //GoogleMap
-            GoogleMap(
-              padding: EdgeInsets.only(top: 100),
-              myLocationButtonEnabled: true,
-              myLocationEnabled: true,
-              initialCameraPosition:
-                  CameraPosition(target: LatLng(0, 0), zoom: 17),
-              onMapCreated: (GoogleMapController controller) {
-                setState(() {
-                  mapController = controller;
-                });
+      child: WillPopScope(
+        onWillPop: ()=>_onBackButtonClicked(context),
+        child: Scaffold(
+          body: Stack(
+            children: [
+              //GoogleMap
+              GoogleMap(
+                padding: EdgeInsets.only(top: 100),
+                myLocationButtonEnabled: true,
+                myLocationEnabled: true,
+                initialCameraPosition:
+                    CameraPosition(target: LatLng(0, 0), zoom: 17),
+                onMapCreated: (GoogleMapController controller) {
+                  setState(() {
+                    mapController = controller;
+                  });
 
-              },
-            ),
+                },
+              ),
 
-            //custom AppBar
-            Container(
-              height: 105.68,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Color(0xFF4885ED),
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(30),
-                  bottomRight: Radius.circular(30),
+              //custom AppBar
+              Container(
+                height: 105.68,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Color(0xFF4885ED),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(30),
+                    bottomRight: Radius.circular(30),
+                  ),
+                ),
+                child: Center(
+                  child: Text(
+                    'ISLAMIYAH SCHOOL',
+                    style: GoogleFonts.inter(
+                        color: Colors.white,
+                        fontSize: 25,
+                        fontWeight: FontWeight.w700),
+                  ),
                 ),
               ),
-              child: Center(
-                child: Text(
-                  'ISLAMIYAH SCHOOL',
-                  style: GoogleFonts.inter(
-                      color: Colors.white,
-                      fontSize: 25,
-                      fontWeight: FontWeight.w700),
-                ),
-              ),
-            ),
 
 
-                 Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                   Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
 
-                    children: [
-                      SizedBox(
-                        height: size.height * 0.735,
-                      ),
-                      Visibility(
-                        visible: !isTracking,
-                        child: SizedBox(
-                          width:200,
-                          height: 40,
-                          child: ElevatedButton(
-                            style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.green)),
-                            onPressed: ()async {
-                              await BackgroundLocationTrackerManager.startTracking();
-                              setState(() => isTracking = true);
-                            },
-                            child: Text('Start Trip',style: TextStyle(fontSize: 25)),
+                      children: [
+                        SizedBox(
+                          height: size.height * 0.735,
+                        ),
+                        Visibility(
+                          visible: !isTracking,
+                          child: SizedBox(
+                            width:200,
+                            height: 40,
+                            child: ElevatedButton(
+                              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.green)),
+                              onPressed: ()async {
+                                await BackgroundLocationTrackerManager.startTracking();
+                                setState(() => isTracking = true);
+                              },
+                              child: Text('Start Trip',style: TextStyle(fontSize: 25)),
+                            ),
                           ),
                         ),
-                      ),
-                      Visibility(
-                        visible: isTracking,
-                        child: SizedBox(
-                          width: 200,
-                          height: 40,
-                          child: ElevatedButton(
-                            style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.red)),
-                            onPressed: () async{
-                              await LocationDao().clear();
-                              await _getLocations();
-                              await BackgroundLocationTrackerManager.stopTracking();
-                              setState(() => isTracking = false);
-                            },
-                            child: Text('Stop Trip',style: TextStyle(fontSize: 25),),
+                        Visibility(
+                          visible: isTracking,
+                          child: SizedBox(
+                            width: 200,
+                            height: 40,
+                            child: ElevatedButton(
+                              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.red)),
+                              onPressed: () async{
+                                await LocationDao().clear();
+                                await _getLocations();
+                                await BackgroundLocationTrackerManager.stopTracking();
+                                Navigator.pushNamed(context, AppRoutes.busListPage);
+                                setState(() => isTracking = false);
+                              },
+                              child: Text('Stop Trip',style: TextStyle(fontSize: 25),),
+                            ),
                           ),
+                        ),
+                      ],
+                    ),
+                ),
+
+
+            ],
+          ),
+
+          //BottomNavigationBar
+          bottomNavigationBar: BottomAppBar(
+            child: Container(
+              color: Color(0xFF4885ED),
+              height: 93.68,
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 25.0, right: 25),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      //Home Button
+                      IconButton(
+                        onPressed: () {
+                          //showDialogue(context,'home');
+                        },
+                        icon: Icon(
+                          Icons.home_filled,
+                          size: 35,
+                          color: Color(0xFFF8F8F8),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 65,
+                      ),
+
+                      //Settings Button
+                      IconButton(
+                        onPressed: () {
+                         // showDialogue(context,'setting');
+                          Navigator.pushNamed(context, AppRoutes.settingsPage);
+                        },
+                        icon: Icon(
+                          Icons.settings,
+                          size: 35,
+                          color: Color(0xFFF8F8F8),
                         ),
                       ),
                     ],
                   ),
+                ),
               ),
-
-
-          ],
+            ),
+          ),
         ),
-
-        //BottomNavigationBar
-        bottomNavigationBar: NavBar(),
       ),
     );
+
   }
 
   Future<void> _getTrackingStatus() async {
@@ -169,14 +259,13 @@ class _HomePageState extends State<HomePage> {
     final locations = await LocationDao().getLocations();
 
     if(locations.isNotEmpty) {
-      database.child('school/islamiyah/trips/$busId').set({
+      database.child('school/$schoolId/trips/$busId').set({
         'user-Id': userId,
         'schoolId': schoolId,
         'busId': busId,
         'location': locations
       });
     }
-    // debugPrint("Current Location${locations}");
 
   }
 
@@ -204,4 +293,23 @@ class _HomePageState extends State<HomePage> {
   void deactivate() {
     super.deactivate();
   }
+
+  Future<bool> _onBackButtonClicked(BuildContext context) async {
+    final now = DateTime.now();
+    if (currentBackPressTime == null ||
+        now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
+      currentBackPressTime = now;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Press again to exit'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return false;
+    }
+    SystemNavigator.pop();
+    return true;
+  }
+
+
 }

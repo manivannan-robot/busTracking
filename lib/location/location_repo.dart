@@ -57,7 +57,7 @@ class LocationDao {
     return locationsString.split(_locationSeparator);
   }
 
-  Future<void> clear() async => (await prefs).clear();
+  Future<void> clear() async => (await prefs).remove(_locationsKey);
 }
 
 
@@ -96,7 +96,7 @@ class LocationDao1 {
     return locationsString;
   }
 
-  Future<void> clear() async => (await prefs1).clear();
+  Future<void> clear() async => (await prefs1).remove(_locationsKey1);
 }
 
 

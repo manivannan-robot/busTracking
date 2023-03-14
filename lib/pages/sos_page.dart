@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../routes/app_routes.dart';
 
@@ -47,7 +48,15 @@ class _SosPageState extends State<SosPage> {
                         color: Color(0xFFE20606),
                         borderRadius: BorderRadius.circular(5)),
                   ),
-                  onTap: () {},
+                  onTap: () async{
+                    Uri phoneno = Uri.parse('tel:9840119746');
+                    if (await launchUrl(phoneno)) {
+
+                    } else {
+                      throw 'Could not launch $phoneno';
+                    }
+
+                  },
                 ),
                 GestureDetector(
                   child: Container(
@@ -58,7 +67,14 @@ class _SosPageState extends State<SosPage> {
                         color: Color(0xFF16ADE1),
                         borderRadius: BorderRadius.circular(5)),
                   ),
-                  onTap: () {},
+                  onTap: () async{
+                    Uri phoneno = Uri.parse('tel:108');
+                    if (await launchUrl(phoneno)) {
+
+                    } else {
+                    throw 'Could not launch $phoneno';
+                    }
+                  },
                 ),
               ],
             ),
@@ -124,7 +140,9 @@ class _SosPageState extends State<SosPage> {
             children: [
               //Home Button
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, AppRoutes.busListPage);
+                },
                 icon: Icon(
                   Icons.home_filled,
                   size: 35,
@@ -137,7 +155,9 @@ class _SosPageState extends State<SosPage> {
 
               //Settings Button
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, AppRoutes.settingsPage);
+                },
                 icon: Icon(
                   Icons.settings,
                   size: 35,

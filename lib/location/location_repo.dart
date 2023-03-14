@@ -80,18 +80,19 @@ class LocationDao1 {
   Future<void> saveLocationData(BackgroundLocationUpdateData data) async {
     var locations = await getLocationsData();
 
+    String loc='${data.lat},${data.lon}';
    debugPrint("MANI loc ${locations}locations");
 
 
     await (await prefs1)
-        .setString(_locationsKey1,locations.toString() );
+        .setString(_locationsKey1,loc.toString() );
   }
 
   Future<String> getLocationsData() async {
     final prefs1 = await this.prefs1;
     await prefs1.reload();
     final locationsString = prefs1.getString(_locationsKey1);
-    if (locationsString == null) return '';
+    if (locationsString == null) return 'empty';
     return locationsString;
   }
 

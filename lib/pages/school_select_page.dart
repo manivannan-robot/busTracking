@@ -3,10 +3,12 @@
 import 'dart:convert';
 
 import 'package:azep_bus_app/api/school_list_api.dart';
+import 'package:azep_bus_app/models/trip_starting_arguments.dart';
 import 'package:azep_bus_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/school_list_model.dart';
 import '../utils/constants.dart';
@@ -31,8 +33,6 @@ class _SchoolSelectPageState extends State<SchoolSelectPage> {
 
   @override
   Widget build(BuildContext context) {
-
-
 
     var size = MediaQuery.of(context).size;
     return SafeArea(
@@ -142,14 +142,12 @@ class _SchoolSelectPageState extends State<SchoolSelectPage> {
                              items:schoolList?.map((item) {
                                print(item);
                                return DropdownMenuItem(
-                                 value: item?.id,
+                                 value: item?.schoolId,
                                  child:Text(item!.schoolName!),
                                );
                              }).toList(),
                              onChanged: (value) {
-                               setState(() {
-                                 selectedSchool=(value as String?)!;
-                               });
+                               saveSelectedSchool(value);
                              },
                            ),
                          )),
@@ -172,7 +170,7 @@ class _SchoolSelectPageState extends State<SchoolSelectPage> {
                       primary: Color(0xFF4885ED),
                     ),
                     onPressed: () {
-                      Navigator.pushNamed(context, AppRoutes.loginPage);
+                      Navigator.pushReplacementNamed(context, AppRoutes.loginPage);
 
                     },
                     child: Text(
@@ -212,6 +210,16 @@ class _SchoolSelectPageState extends State<SchoolSelectPage> {
       }
 
     });
+  }
+
+  void saveSelectedSchool(String? value) async{
+    SharedPreferences pref=await SharedPreferences.getInstance();
+    pref.setString('School-Id', value.toString());
+
+    setState(() {
+      selectedSchool=(value)!;
+    });
+
   }
 
 

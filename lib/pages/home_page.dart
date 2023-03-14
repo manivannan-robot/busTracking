@@ -11,6 +11,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../location/location_repo.dart';
+import '../models/trip_starting_arguments.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -26,6 +27,10 @@ class _HomePageState extends State<HomePage> {
   final database = FirebaseDatabase.instance.ref();
   GoogleMapController? mapController;
   final currentLocation = LocationDao().getLocations();
+  var busId ;
+  var schoolId ;
+  var userId ;
+
 
   @override
   void initState() {
@@ -44,12 +49,19 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    TripStartArguments arguments = ModalRoute.of(context)?.settings.arguments as TripStartArguments;
+
+     busId = arguments.busId;
+     schoolId  = arguments.schoolId;
+    userId = arguments.userId;
+
     return SafeArea(
       child: Scaffold(
         body: Stack(
           children: [
             //GoogleMap
             GoogleMap(
+              padding: EdgeInsets.only(top: 100),
               myLocationButtonEnabled: true,
               myLocationEnabled: true,
               initialCameraPosition:
@@ -58,7 +70,7 @@ class _HomePageState extends State<HomePage> {
                 setState(() {
                   mapController = controller;
                 });
-                _getStreaming();
+
               },
             ),
 
@@ -83,31 +95,53 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            Column(
-              children: [
-                SizedBox(
-                  height: size.height * 0.735,
-                ),
-                Visibility(
-                  visible: !isTracking,
-                  child: ElevatedButton(
-                    onPressed: () {
 
-                    },
-                    child: Text('Start Trip'),
-                  ),
-                ),
-                Visibility(
-                  visible: isTracking,
-                  child: ElevatedButton(
-                    onPressed: () {
 
-                    },
-                    child: Text('Stop Trip'),
+                 Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+
+                    children: [
+                      SizedBox(
+                        height: size.height * 0.735,
+                      ),
+                      Visibility(
+                        visible: !isTracking,
+                        child: SizedBox(
+                          width:200,
+                          height: 40,
+                          child: ElevatedButton(
+                            style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.green)),
+                            onPressed: ()async {
+                              await BackgroundLocationTrackerManager.startTracking();
+                              setState(() => isTracking = true);
+                            },
+                            child: Text('Start Trip',style: TextStyle(fontSize: 25)),
+                          ),
+                        ),
+                      ),
+                      Visibility(
+                        visible: isTracking,
+                        child: SizedBox(
+                          width: 200,
+                          height: 40,
+                          child: ElevatedButton(
+                            style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.red)),
+                            onPressed: () async{
+                              await LocationDao().clear();
+                              await _getLocations();
+                              await BackgroundLocationTrackerManager.stopTracking();
+                              setState(() => isTracking = false);
+                            },
+                            child: Text('Stop Trip',style: TextStyle(fontSize: 25),),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
+              ),
+
+
           ],
         ),
 
@@ -133,33 +167,37 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _getLocations() async {
     final locations = await LocationDao().getLocations();
-    debugPrint("Current Location${locations}");
-    database.child('school/islamiyah/trips')
-        .set({'driverId': driverId, 'location': locations});
-    setState(() {
-      _locations = locations;
-    });
+
+    if(locations.isNotEmpty) {
+      database.child('school/islamiyah/trips/$busId').set({
+        'user-Id': userId,
+        'schoolId': schoolId,
+        'busId': busId,
+        'location': locations
+      });
+    }
+    // debugPrint("Current Location${locations}");
 
   }
 
   void _startLocationsUpdatesStream() {
     _timer?.cancel();
-    _timer = Timer.periodic(const Duration(milliseconds: 250), (timer) {
+    _timer = Timer.periodic(const Duration(milliseconds: 5000), (timer) {
       _getLocations();
-      _getStreaming();
+      _getMapAnimation();
     });
   }
 
 
-  void _getStreaming() async{
-    final locations = await LocationDao().getLocations();
+  void _getMapAnimation() async{
+    final locations = await LocationDao1().getLocationsData();
     debugPrint("MANI HOMEPAGE ${locations}");
+    String latLngString = locations;
+    List<String> latLngList = latLngString.split(',');
+    double lat = double.parse(latLngList[0]);
+    double lng = double.parse(latLngList[1]);
+    mapController?.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(lat,lng),zoom: 17)));
 
-
-    // BackgroundLocationTrackerManager.handleBackgroundUpdated((data) async {
-    //   debugPrint("MANI HOMEPAGE ${data.lat}");
-    //   mapController?.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(data.lat ,data.lon),zoom: 17)));
-    // });
   }
 
   @override

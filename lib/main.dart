@@ -15,7 +15,7 @@ import 'location/location_repo.dart';
 @pragma('vm:entry-point')
 void backgroundCallback() {
   BackgroundLocationTrackerManager.handleBackgroundUpdated(
-        (data) async => Repo().update(data),
+    (data) async => Repo().update(data),
   );
 }
 
@@ -49,7 +49,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -58,13 +57,7 @@ class _MyAppState extends State<MyApp> {
       routes: AppRoutes.routes,
     );
   }
-
 }
-
-
-
-
-
 
 //--- SPLASH SCREEN PAGE -------------------------------------------------------
 class SplashScreen extends StatefulWidget {
@@ -91,14 +84,14 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   Future<void> navigationPage() async {
-    SharedPreferences pref=await SharedPreferences.getInstance();
-    var mobileNo = pref.getString("mobile_no");
-    var selectedBus=pref.getString('selected_bus');
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    var userId = pref.getString("User-Id");
 
-    (mobileNo==null)?Navigator.of(context).pushReplacementNamed(AppRoutes.schoolSelectPage):Navigator.of(context).pushReplacementNamed(AppRoutes.homePage,arguments: mobileNo);
 
-    debugPrint('MANI11 main MobileNo: $mobileNo , Bus:$selectedBus');
+    (userId==null)?Navigator.of(context).pushReplacementNamed(AppRoutes.schoolSelectPage):Navigator.of(context).pushReplacementNamed(AppRoutes.busListPage);
 
+
+    debugPrint('MANI11 main userId: $userId ');
   }
 
   @override
@@ -116,13 +109,13 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFF4885ED),
       body: Center(
         child: FadeTransition(
           opacity: _animation,
           child: Padding(
             padding: const EdgeInsets.all(80),
-            child: Image.asset("assets/images/bus-png.png"),
+            child: Image.asset("assets/images/SplashScreen.gif"),
           ),
         ),
       ),

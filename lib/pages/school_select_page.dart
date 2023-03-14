@@ -1,20 +1,39 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:convert';
+
+import 'package:azep_bus_app/api/school_list_api.dart';
+import 'package:azep_bus_app/models/trip_starting_arguments.dart';
 import 'package:azep_bus_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../models/school_list_model.dart';
+import '../utils/constants.dart';
+import '../utils/size.dart';
 
 class SchoolSelectPage extends StatefulWidget {
-  const SchoolSelectPage({super.key});
-
   @override
   State<SchoolSelectPage> createState() => _SchoolSelectPageState();
 }
 
 class _SchoolSelectPageState extends State<SchoolSelectPage> {
-  String dropdownValue = 'One';
+
+  List<SchoolListResponseData?>? schoolList;
+  String? selectedSchool;
+
+  @override
+  void initState() {
+    super.initState();
+    getSchoolListFunction();
+  }
+
+
   @override
   Widget build(BuildContext context) {
+
     var size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
@@ -103,54 +122,41 @@ class _SchoolSelectPageState extends State<SchoolSelectPage> {
               const SizedBox(
                 height: 6,
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 48.0, right: 48.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Color(0xFF939393),
-                      ),
-                      borderRadius: BorderRadius.circular(5)),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        isExpanded: true,
-                        value: dropdownValue,
-                        icon: Icon(Icons.arrow_drop_down_rounded),
-                        style: GoogleFonts.inter(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xFF939393),
-                        ),
-                        onChanged: (String? value) {
-                          setState(() {
-                            dropdownValue = value!;
-                          });
-                        },
-                        items: const [
-                          DropdownMenuItem<String>(
-                            value: 'One',
-                            child: Text('Islamia. Mat. Hr. Sec  School'),
-                          ),
-                          DropdownMenuItem<String>(
-                            value: 'Two',
-                            child: Text('Cresent. Mat. Hr. Sec School'),
-                          ),
-                          DropdownMenuItem<String>(
-                            value: 'Three',
-                            child: Text('Mushraf. Mat. Hr. Sec School'),
-                          ),
-                          DropdownMenuItem<String>(
-                            value: 'Four',
-                            child: Text('Althaf Alluma. Arab School'),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+
+               Padding(
+                 padding: EdgeInsets.only(left:48,right: 48),
+                 child: Container(
+                   decoration: BoxDecoration(
+                       border: Border.all(
+                         color: Color(0xFF939393),
+                       ),
+                       borderRadius: BorderRadius.circular(5)),
+                   child: Padding(
+                     padding: EdgeInsets.only(left: 8,right: 8),
+                     child: Row(
+                       children: [
+                         Expanded(child: DropdownButtonHideUnderline(
+                           child: DropdownButton<String>(
+                             hint: Text('Select School'),
+                             value: selectedSchool,
+                             items:schoolList?.map((item) {
+                               print(item);
+                               return DropdownMenuItem(
+                                 value: item?.schoolId,
+                                 child:Text(item!.schoolName!),
+                               );
+                             }).toList(),
+                             onChanged: (value) {
+                               saveSelectedSchool(value);
+                             },
+                           ),
+                         )),
+                       ],
+                     ),
+                   ),
+                 ),
+               ),
+
               const SizedBox(
                 height: 30,
               ),
@@ -164,7 +170,7 @@ class _SchoolSelectPageState extends State<SchoolSelectPage> {
                       primary: Color(0xFF4885ED),
                     ),
                     onPressed: () {
-                      Navigator.pushNamed(context, AppRoutes.loginPage);
+                      Navigator.pushReplacementNamed(context, AppRoutes.loginPage);
 
                     },
                     child: Text(
@@ -181,4 +187,41 @@ class _SchoolSelectPageState extends State<SchoolSelectPage> {
       ),
     );
   }
+
+
+  Future<void> getSchoolListFunction() async{
+     var schoolListAPI=SchoolListAPI();
+    schoolListAPI.schoolList().then((value) async {
+
+      if (value.statusCode == 200) {
+          var schoolListResponse =SchoolListResponse.fromJson(jsonDecode(value.body));
+         print('SCHOOL LIST PAGE ${schoolListResponse.data}');
+
+         setState(() {
+           schoolList =schoolListResponse.data ;
+         });
+
+
+        Fluttertoast.showToast(msg: schoolListResponse.message!);
+        // Navigator.pushReplacementNamed(context, AppRoutes.homePage);
+      } else {
+        Fluttertoast.showToast(msg: jsonDecode(value.body)['message']);
+
+      }
+
+    });
+  }
+
+  void saveSelectedSchool(String? value) async{
+    SharedPreferences pref=await SharedPreferences.getInstance();
+    pref.setString('School-Id', value.toString());
+
+    setState(() {
+      selectedSchool=(value)!;
+    });
+
+  }
+
+
 }
+

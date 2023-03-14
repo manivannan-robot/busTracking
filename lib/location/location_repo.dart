@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:background_location_tracker/background_location_tracker.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,6 +19,7 @@ class Repo {
     print('MANI update $text'); // ignore: avoid_print
     sendNotification(text);
     await LocationDao().saveLocation(data);
+    await LocationDao1().saveLocationData(data);
   }
 }
 
@@ -57,6 +59,48 @@ class LocationDao {
 
   Future<void> clear() async => (await prefs).clear();
 }
+
+
+class LocationDao1 {
+  static const _locationsKey1 = 'background_updated';
+  // static const _locationSeparator = '-/-/-/';
+
+  static LocationDao1? _instance;
+
+  LocationDao1._();
+
+  factory LocationDao1() => _instance ??= LocationDao1._();
+
+  SharedPreferences? _prefs1;
+
+  Future<SharedPreferences> get prefs1 async =>
+      _prefs1 ??= await SharedPreferences.getInstance();
+
+
+  Future<void> saveLocationData(BackgroundLocationUpdateData data) async {
+    var locations = await getLocationsData();
+
+    String loc='${data.lat},${data.lon}';
+   debugPrint("MANI loc ${locations}locations");
+
+
+    await (await prefs1)
+        .setString(_locationsKey1,loc.toString() );
+  }
+
+  Future<String> getLocationsData() async {
+    final prefs1 = await this.prefs1;
+    await prefs1.reload();
+    final locationsString = prefs1.getString(_locationsKey1);
+    if (locationsString == null) return 'empty';
+    return locationsString;
+  }
+
+  Future<void> clear() async => (await prefs1).clear();
+}
+
+
+
 
 void sendNotification(String text) {
   const settings = InitializationSettings(

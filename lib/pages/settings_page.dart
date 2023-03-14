@@ -2,8 +2,10 @@
 
 import 'package:azep_bus_app/pages/bus_lists_page.dart';
 import 'package:azep_bus_app/pages/forgot_password_page.dart';
+import 'package:azep_bus_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends StatefulWidget {
 
@@ -94,12 +96,7 @@ class _SettingsPageState extends State<SettingsPage> {
               //decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
               child: TextButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ForgotPasswordPage(),
-                    ),
-                  );
+                  Navigator.pushNamed(context, AppRoutes.forgotPasswordPage);
                 },
                 child: Row(
                   children: [
@@ -123,6 +120,7 @@ class _SettingsPageState extends State<SettingsPage> {
               width: size.width,
               child: TextButton(
                 onPressed: () {
+                  Navigator.pushReplacementNamed(context, AppRoutes.sosPage);
 
                 },
                 child: Row(
@@ -147,7 +145,10 @@ class _SettingsPageState extends State<SettingsPage> {
               height: 53,
               width: size.width,
               child: TextButton(
-                onPressed: () {
+                onPressed: () async{
+                  SharedPreferences pref=await SharedPreferences.getInstance();
+                  pref.clear();
+                  Navigator.pushReplacementNamed(context, AppRoutes.schoolSelectPage);
 
                 },
                 child: Row(
@@ -180,12 +181,7 @@ class _SettingsPageState extends State<SettingsPage> {
             children: [
               IconButton(
                 onPressed: () {
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => BusLists(),
-                      ),
-                      ((route) => route.isFirst));
+                  Navigator.pushReplacementNamed(context, AppRoutes.busListPage);
                 },
                 icon: Icon(
                   Icons.home_filled,
@@ -197,7 +193,9 @@ class _SettingsPageState extends State<SettingsPage> {
                 width: 65,
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, AppRoutes.settingsPage);
+                },
                 icon: Icon(
                   Icons.settings,
                   size: 35,

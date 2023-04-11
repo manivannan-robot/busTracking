@@ -1,4 +1,4 @@
-package com.example.azep_bus_app
+package com.azep.location_tracking
 
 import io.flutter.embedding.android.FlutterActivity
 

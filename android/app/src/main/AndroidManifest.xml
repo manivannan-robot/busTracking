@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.azep_bus_app">
+    package="com.azep.location_tracking">
 
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
@@ -10,7 +10,8 @@
    <application
         android:label="Location Tracking"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+       android:exported="true">
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -43,6 +44,14 @@
        <meta-data
            android:name="com.google.android.geo.API_KEY"
            android:value="AIzaSyC9MY8G6wuzz1lgXDq2Ugjw9jlbw6am78w" />
+
+       <receiver
+           android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver"
+           android:exported="false">
+           <intent-filter>
+               <action android:name="android.intent.action.BOOT_COMPLETED" />
+           </intent-filter>
+       </receiver>
 
     </application>
 </manifest>

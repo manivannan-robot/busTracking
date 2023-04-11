@@ -1,8 +1,5 @@
 import 'dart:convert';
 
-import 'package:azep_bus_app/pages/bus_lists_page.dart';
-import 'package:azep_bus_app/pages/forgot_password_page.dart';
-import 'package:azep_bus_app/pages/text_fields.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -67,37 +64,60 @@ class _LoginPageState extends State<LoginPage> {
     return SafeArea(
       child: WillPopScope(
         onWillPop: ()=>_onBackButtonClicked(context),
-        child: Expanded(
-          child: Scaffold(
-            resizeToAvoidBottomInset: false,
-            backgroundColor: Colors.white,
-            body: Center(
-              child: Form(
-                key: globalFormKey,
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 130,
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          backgroundColor: Colors.white,
+          body: Center(
+            child: Form(
+              key: globalFormKey,
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 130,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: 145.0,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 145.0,
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
+                    child: Row(
+                      children: [
+                        Container(
+                          height: 35,
+                          width: 35,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: const Color(
+                              0xFFAEAEAE,
+                            ),
+                          ),
+                          child: Center(
+                            child: TextButton(
+                              child: Text(
+                                '1',
+                                style: GoogleFonts.inter(
+                                    color: Colors.white,
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                              onPressed: () {
+                                Navigator.pushReplacementNamed(context, AppRoutes.schoolSelectPage);
+                              },
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 25),
+                          child: Container(
                             height: 35,
                             width: 35,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
-                              color: Color(
-                                0xFFAEAEAE,
-                              ),
+                              color: Color(0xFF4885ED),
                             ),
                             child: Center(
                               child: TextButton(
                                 child: Text(
-                                  '1',
+                                  '2',
                                   style: GoogleFonts.inter(
                                       color: Colors.white,
                                       fontSize: 20.0,
@@ -107,162 +127,139 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 25),
-                            child: Container(
-                              height: 35,
-                              width: 35,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: Color(0xFF4885ED),
-                              ),
-                              child: Center(
-                                child: TextButton(
-                                  child: Text(
-                                    '2',
-                                    style: GoogleFonts.inter(
-                                        color: Colors.white,
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.w700),
-                                  ),
-                                  onPressed: () {},
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    SizedBox(
-                      height: 190,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 48.0, right: 48),
-                      child: TextFormField(
-                          decoration: const InputDecoration(
-                            hintText: 'UserName',
-                            border: OutlineInputBorder(),
-                          ),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return ToastMessage().message(
-                                  'The user name field is required.', context);
-                            } else {
-                              return null;
-                            }
-                          },
-                          onChanged: (input) {
-                            loginRequestBody.username = input.trim();
-                          }),
-                    ),
-                    SizedBox(
-                      height: 11,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 48.0, right: 48),
-                      child: TextFormField(
+                  ),
+                  const SizedBox(
+                    height: 150,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 48.0, right: 48),
+                    child: TextFormField(
                         decoration: const InputDecoration(
-                          hintText: 'Password',
+                          hintText: 'UserName',
                           border: OutlineInputBorder(),
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
                             return ToastMessage().message(
-                                'The Password field is required.', context);
+                                'The user name field is required.', context);
                           } else {
                             return null;
                           }
                         },
-                          onChanged: (input) {
-                            loginRequestBody.password =
-                                input.trim();
-                          }
+                        onChanged: (input) {
+                          loginRequestBody.username = input.trim();
+                        }),
+                  ),
+                  SizedBox(
+                    height: 11,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 48.0, right: 48),
+                    child: TextFormField(
+                      decoration: const InputDecoration(
+                        hintText: 'Password',
+                        border: OutlineInputBorder(),
                       ),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return ToastMessage().message(
+                              'The Password field is required.', context);
+                        } else {
+                          return null;
+                        }
+                      },
+                        onChanged: (input) {
+                          loginRequestBody.password =
+                              input.trim();
+                        }
                     ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 48.0),
-                          child: Container(
-                            height: 30,
-                            child: Center(
-                              child: TextButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(
-                                      context, AppRoutes.forgotPasswordPage);
-                                },
-                                child: Text(
-                                  'forgot password?',
-                                  style: GoogleFonts.inter(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 10,
-                                      color: Color(0xFF939393)),
-                                ),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 48.0),
+                        child: Container(
+                          height: 30,
+                          child: Center(
+                            child: TextButton(
+                              onPressed: () {
+                                Navigator.pushNamed(
+                                    context, AppRoutes.forgotPasswordPage);
+                              },
+                              child: Text(
+                                'forgot password?',
+                                style: GoogleFonts.inter(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 10,
+                                    color: Color(0xFF939393)),
                               ),
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 3,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 48.0, right: 48.0),
-                      child: SizedBox(
-                        width: size.width,
-                        height: 39,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: Color(0xFF4885ED),
-                          ),
-                          onPressed: isButtonDisable
-                              ? () {}
-                              : (() {
-                            if (loginRequestBody.password ==
-                                '' ||
-                                loginRequestBody.password ==
-                                    null) {
-                              ToastMessage().message(
-                                  "Please Enter Password",
-                                  context);
-                            } else if (loginRequestBody.username == '' ||
-                                loginRequestBody.username == null) {
-                              ToastMessage().message(
-                                  "Please Enter Username",
-                                  context);
-                            } else {
-                              _loginFunction();
-                            }
-                          }),
-                          child: Text(
-                            'Next',
-                            style: GoogleFonts.inter(
-                                fontSize: 20, fontWeight: FontWeight.w700),
-                          ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 3,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 48.0, right: 48.0),
+                    child: SizedBox(
+                      width: size.width,
+                      height: 39,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Color(0xFF4885ED),
+                        ),
+                        onPressed: isButtonDisable
+                            ? () {}
+                            : (() {
+                          if (loginRequestBody.password ==
+                              '' ||
+                              loginRequestBody.password ==
+                                  null) {
+                            ToastMessage().message(
+                                "Please Enter Password",
+                                context);
+                          } else if (loginRequestBody.username == '' ||
+                              loginRequestBody.username == null) {
+                            ToastMessage().message(
+                                "Please Enter Username",
+                                context);
+                          } else {
+                            _loginFunction();
+                          }
+                        }),
+                        child: Text(
+                          'Next',
+                          style: GoogleFonts.inter(
+                              fontSize: 20, fontWeight: FontWeight.w700),
                         ),
                       ),
                     ),
-                    isButtonDisable ? Container(
-                      height: 20,
-                      width: 20,
-                      margin:
-                      getMargin(left: 15),
-                      child: Center(
-                        child:
-                        CircularProgressIndicator(
-                          color: ColorConstant
-                              .textBlack,
-                        ),
+                  ),
+                  isButtonDisable ? Container(
+                    height: 20,
+                    width: 20,
+                    margin:
+                    getMargin(left: 15),
+                    child: Center(
+                      child:
+                      CircularProgressIndicator(
+                        color: ColorConstant
+                            .textBlack,
                       ),
-                    )
-                        : const SizedBox(),
+                    ),
+                  )
+                      : const SizedBox(),
 
-                  ],
-                ),
+                ],
               ),
             ),
           ),
